@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raspberry Pi에서 Apache, MySQL, PHP, phpMyAdmin 설치하기</title>
+</head>
+<body>
+    <h1>Raspberry Pi에서 Apache, MySQL, PHP, phpMyAdmin 설치하기</h1>
+    <p>이 글은 Raspberry Pi에서 Apache, MySQL, PHP, phpMyAdmin을 설치하는 방법을 설명합니다.</p>
+    <p>참조한 사이트: <a href="https://fishpoint.tistory.com/2230">https://fishpoint.tistory.com/2230</a></p>
+
+    <h2>시작하기에 앞서</h2>
+    <p>apt-get 업데이트로 미러사이트 최신 버전을 가져온다.</p>
+    <pre>
+$sudo apt-get update
+$sudo apt-get upgrade
+    </pre>
+    <p>이제 순서에 맞게 설치를 해야한다.</p>
+    <ol>
+        <li>Apache</li>
+        <li>MySQL</li>
+        <li>PHP</li>
+        <li>phpMyAdmin</li>
+    </ol>
+
+    <h2>1. 아파치(Apache2) 설치</h2>
+    <pre>$sudo apt-get install apache2</pre>
+    <p>디스크를 사용하겠냐고 물어보는데 Y를 누르고 설치를 진행한다.</p>
+    <p>pi 유저로 작업하기위해 /var/www 에 소유 권한을 가지게 한다.</p>
+    <pre>$sudo chown pi -R /var/www/html</pre>
+    <p>다음으로는 아파치2를 pi를 부팅할때 자동적으로 실행이 되도록 설정한다.</p>
+    <pre>$sudo update-rc.d apache2 defaults</pre>
+    <p>이제 리붓을 한번 해준다.</p>
+    <pre>$reboot -n</pre>
+    <p>그러면 크롬 브라우저에서 pi의 localhost 주소를 입력을 해주게 되면 아파치 기본 페이지가 나올 것이다. 이렇게 된다면 정상적으로 설치가 완료되었다.</p>
+
+    <h2>2. MySQL 설치</h2>
+    <p>아래의 명령어는 MySQL을 설치하는 명령어이다. 하지만 오래되었기 때문에 다른 명령어를 치라고 나올수 있다. 만약 나오지 않았다면 아래의 명령어를 쳐서 MySQL을 설치하자.</p>
+    <pre>$sudo apt-get install mysql-server mysql-client libmysqlclient-dev</pre>
+    <p>만약 이 명령어가 실행이 안될경우 뜨는 메세지에 나오는 명령어를 아래의 명령어에 있는 mysql 자리에 그 명령어를 적어주면 된다.</p>
+    <pre>$sudo apt search mysql</pre>
+    <p>이후 그 명령어가 있다면 install 하면된다.</p>
+
+    <h2>3. PHP 설치</h2>
+    <p>먼저 자신이 다운로드 받을 수 있는 PHP 버전을 찾아야 한다.</p>
+    <pre>$sudo apt search php</pre>
+    <p>php7.1 버전과 php7.2 버전이 있었는데 여기서 7.1버전을 택하였다.</p>
+    <pre>$sudo apt-get install php7.1</pre>
+    <p>이제 php가 정상적으로 잘 작동이 되는지 확인을 해야한다. 아래와 같이 해보자.</p>
+    <pre>$sudo nano /var/www/html/phpinfo.php</pre>
+    <p>무조건 nano 로 할 필요는 없다. 자신이 편한 에디터로 하면 된다.</p>
+    <p>여기에서 <code>&lt;?php phpinfo();?&gt;</code>를 작성하고 CTRL+X ----> y 를 하고 저장하고 나와주면 된다.</p>
+    <p>그리고 주소창에 자신의 아이피를 입력하고 뒤에 phpinfo.php 를 입력을 하게 되면 PHP 정보 페이지가 나오면 성공이다.</p>
+    <p>ex) 127.0.0.1/phpinfo.php 또는 localhost/phpinfo.php 를 친다.</p>
+
+    <h2>4. phpMyAdmin</h2>
+    <pre>$sudo apt-get install phpmyadmin</pre>
+    <p>phpmyadmin 설치는 위와 같이 하면 설치가 됩니다. 접속이 원활하게 되는지 확인을 할때에는 자신의아이피/phpmyadmin 과 같이 해주시면 됩니다.</p>
+    <p>ex) 127.0.0.1/phpmyadmin 또는 localhost/phpmyadmin</p>
+    
+    <h3>위와 같이 안나왔을 경우 (오류가 있을 경우)</h3>
+    <p>아래와 같이 진행해주시면 바로 됩니다.</p>
+    <p>먼저 phpx.x 중 자신이 다운로드 받은 버전을 적어주면 됩니다.</p>
+    <pre>$sudo apt-get install php7.1-mysqlnd</pre>
+    <p>또한 mbstring 가 뜰 경우에는 아래와 같이 해줍니다.</p>
+    <pre>
+$sudo apt-get install libapache2-mod-php7.1
+$sudo apt-get install php7.1-mbstring
+    </pre>
+    <p>위와 같이 했을때 아래와 같이 나온다면 아래의 명령어를 입력해주면 해결이 된다.</p>
+    <blockquote>
+        <p>phpMyAdmin - 오류</p>
+        <p>mysqli 확장기능이 설치되지 않았습니다. PHP의 설정을 확인하십시오. See our documentation for more information.</p>
+    </blockquote>
+    <pre>$sudo apt-get install php7.1-mysqlnd</pre>
+    
+    <p>오타 및 오류 발생시 질문 환영합니다.</p>
+</body>
+</html>
